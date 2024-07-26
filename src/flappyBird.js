@@ -25,7 +25,7 @@ let lift = -4;
 let velocity = 0;
 let score = 0;
 let pipeWidth = 100;
-let initPipeSpeed = 3;
+let initPipeSpeed = 5;
 let pipeSpeed = initPipeSpeed;
 let pipeSpeedIncrement = 0.1; // Speed increment for each passed pipe
 let pipeSpacing = 700; // Increased space between consecutive pipes
@@ -84,9 +84,9 @@ function draw() {
   // Clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw background with 50% alpha
-  ctx.fillStyle = "rgba(112, 197, 206, 0.5)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // // Draw background with 50% alpha
+  // ctx.fillStyle = "rgba(112, 197, 206, 0.5)";
+  // ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Draw pipes
   ctx.fillStyle = "#228B22";
