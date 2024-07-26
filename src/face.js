@@ -57,7 +57,7 @@ async function setupWebcam() {
 }
 
 async function loadModels() {
-  const MODEL_URL = "/models";
+  const MODEL_URL = "./models";
   await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
   await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
   await faceapi.nets.mtcnn.loadFromUri(MODEL_URL);
