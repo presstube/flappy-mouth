@@ -5,6 +5,7 @@ export default defineConfig({
     rollupOptions: {
       input: "/src/main.js",
     },
+    outDir: "docs",
   },
   server: {
     open: true,
