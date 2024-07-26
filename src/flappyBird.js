@@ -25,7 +25,7 @@ let lift = -4;
 let velocity = 0;
 let score = 0;
 let pipeWidth = 100;
-let initPipeSpeed = 5;
+let initPipeSpeed = 3;
 let pipeSpeed = initPipeSpeed;
 let pipeSpeedIncrement = 0.1; // Speed increment for each passed pipe
 let pipeSpacing = 700; // Increased space between consecutive pipes
@@ -159,5 +159,6 @@ function draw() {
 }
 
 export function startFlappyBird() {
+  console.log("pipeSpeed: ", pipeSpeed);
   draw();
 }
