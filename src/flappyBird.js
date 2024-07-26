@@ -17,7 +17,7 @@ canvas.height = window.innerHeight;
 
 // Game variables
 let gap = 200;
-let birdX = 50;
+let birdX = 50; // Ensure birdX is defined here
 let birdY = canvas.height / 2;
 let targetBirdY = birdY; // Target y position based on mouthOpen
 let gravity = 0.1;
@@ -90,7 +90,8 @@ function draw() {
 
   // Draw pipes
   ctx.fillStyle = "#228B22";
-  let nextPipeGapY = 0; // Default value if no pipes are present
+  let nextPipeX = 0; // Default value if no pipes are present
+  let nextPipeY = 0; // Default value if no pipes are present
   for (let i = 0; i < pipes.length; i++) {
     let constant = pipes[i].y + gap; // Position of the lower pipe
     ctx.fillRect(pipes[i].x, 0, pipeWidth, pipes[i].y); // Upper pipe
@@ -102,7 +103,8 @@ function draw() {
     ); // Lower pipe
 
     if (i === 0) {
-      nextPipeGapY = pipes[i].y + gap / 2; // Y position of the center of the first pipe gap
+      nextPipeX = pipes[i].x; // X position of the first pipe
+      nextPipeY = pipes[i].y + gap / 2; // Y position of the center of the first pipe gap
     }
 
     pipes[i].x -= pipeSpeed;
@@ -147,8 +149,8 @@ function draw() {
   const tweenSpeed = 0.1; // Adjust tween speed as needed
   birdY += (targetBirdY - birdY) * tweenSpeed;
 
-  // Update pitch based on bird's position and the next pipe gap
-  updatePitch(birdY, canvas.height, nextPipeGapY);
+  // Update pitch and panning based on bird's position and the next pipe position
+  updatePitch(birdY, canvas.height, nextPipeX, nextPipeY, canvas.width, birdX);
 
   // Draw score
   ctx.fillStyle = "#000";
@@ -159,6 +161,5 @@ function draw() {
 }
 
 export function startFlappyBird() {
-  console.log("pipeSpeed: ", pipeSpeed);
   draw();
 }

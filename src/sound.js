@@ -12,12 +12,12 @@ export function initializeSound() {
 
   // Create panners for stereo effect
   pannerBird = new Tone.Panner(-1).toDestination(); // Pan to left channel
-  pannerPipe = new Tone.Panner(1).toDestination(); // Pan to right channel
+  pannerPipe = new Tone.Panner(0).toDestination(); // Initially centered
 
   // Chain the bird synth to the left panner
   synthBird.connect(pannerBird);
 
-  // Chain the pipe synth to the right panner
+  // Chain the pipe synth to the panner
   synthPipe.connect(pannerPipe);
 
   // Start both synths with the note "C4"
@@ -26,7 +26,14 @@ export function initializeSound() {
   synthPipe.triggerAttack("C4", now);
 }
 
-export function updatePitch(birdY, canvasHeight, pipeGapY) {
+export function updatePitch(
+  birdY,
+  canvasHeight,
+  pipeX,
+  pipeY,
+  canvasWidth,
+  birdX,
+) {
   const { pitchFloor, pitchCeil } = getPitchRange();
 
   // Map birdY to a frequency value between pitchFloor and pitchCeil
@@ -35,9 +42,15 @@ export function updatePitch(birdY, canvasHeight, pipeGapY) {
     pitchFloor;
   synthBird.frequency.setValueAtTime(birdPitch, Tone.now());
 
-  // Map pipeGapY to a frequency value between pitchFloor and pitchCeil
+  // Calculate the panning value based on the pipe's position relative to the bird and screen width
+  const relativePipeX = pipeX - birdX;
+  const panningValue = relativePipeX / (canvasWidth / 2); // Normalize between -1 and 1
+  const clampedPanningValue = Math.max(-1, Math.min(1, panningValue)); // Ensure within range
+  pannerPipe.pan.setValueAtTime(clampedPanningValue, Tone.now());
+
+  // Map pipeY to a frequency value between pitchFloor and pitchCeil
   const pipePitch =
-    ((canvasHeight - pipeGapY) / canvasHeight) * (pitchCeil - pitchFloor) +
+    ((canvasHeight - pipeY) / canvasHeight) * (pitchCeil - pitchFloor) +
     pitchFloor;
   synthPipe.frequency.setValueAtTime(pipePitch, Tone.now());
 }
