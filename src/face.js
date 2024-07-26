@@ -236,8 +236,8 @@ function initGUI() {
     .onChange(onSettingsChange);
   gui.add(settings, "mouthThresholdFloor", 0, 50, 1).onChange(onSettingsChange);
   gui.add(settings, "mouthThresholdCeil", 0, 50, 1).onChange(onSettingsChange);
-  gui.add(settings, "pitchFloor", 100, 1000).onChange(onSettingsChange); // Add pitchFloor to GUI
-  gui.add(settings, "pitchCeil", 100, 1000).onChange(onSettingsChange); // Add pitchCeil to GUI
+  gui.add(settings, "pitchFloor", 0, 1000).onChange(onSettingsChange); // Add pitchFloor to GUI
+  gui.add(settings, "pitchCeil", 0, 1000).onChange(onSettingsChange); // Add pitchCeil to GUI
   gui
     .add(settings, "model", ["tinyFaceDetector", "ssdMobilenetv1", "mtcnn"])
     .onChange(onSettingsChange);

@@ -1,5 +1,10 @@
 import { getMouthOpen } from "./face.js";
-import { initializeSound, updatePitch, stopSound } from "./sound.js";
+import {
+  initializeSound,
+  updatePitch,
+  stopSound,
+  playGameOverMelody,
+} from "./sound.js";
 
 const canvas = document.createElement("canvas");
 canvas.id = "gameCanvas"; // Set the ID for the canvas to apply CSS
@@ -20,7 +25,7 @@ let lift = -4;
 let velocity = 0;
 let score = 0;
 let pipeWidth = 100;
-let initPipeSpeed = 10;
+let initPipeSpeed = 3;
 let pipeSpeed = initPipeSpeed;
 let pipeSpeedIncrement = 0.1; // Speed increment for each passed pipe
 let pipeSpacing = 700; // Increased space between consecutive pipes
@@ -58,7 +63,7 @@ function spawnPipe() {
 // Spawn the first pipe
 spawnPipe();
 
-function resetGame() {
+export function resetGame() {
   birdX = 50;
   birdY = canvas.height / 2;
   targetBirdY = birdY;
@@ -111,6 +116,7 @@ function draw() {
       gameRunning = false;
       console.log("COLLIDE");
       stopSound(); // Stop sound on game over
+      playGameOverMelody(); // Play the game over melody
       return;
     }
 
@@ -155,5 +161,3 @@ function draw() {
 export function startFlappyBird() {
   draw();
 }
-
-export { resetGame }; // Export the getter function
