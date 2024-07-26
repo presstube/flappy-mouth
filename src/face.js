@@ -1,6 +1,8 @@
 import * as faceapi from "face-api.js";
 import dat from "dat.gui";
 
+import { resetGame } from "./flappyBird.js";
+
 const defaultSettings = {
   inputSize: 160,
   detectionInterval: 200,
@@ -37,6 +39,7 @@ let canvas;
 let ctx;
 let mouthOpen = 0; // Initialize mouthOpen value
 let leftEyebrowRaise = 0; // Initialize mouthOpen value
+let lastResetTime = 0; // Track the last reset time
 
 async function setupWebcam() {
   const video = document.createElement("video");
@@ -155,6 +158,12 @@ async function detectFaces(videoEl) {
       leftEyebrowRaise = calculateEyebrowRaise(leftEyebrow, leftEye);
       const rightEyebrowRaise = calculateEyebrowRaise(rightEyebrow, rightEye);
 
+      const currentTime = Date.now();
+      if (leftEyebrowRaise > 0.7 && currentTime - lastResetTime > 3000) {
+        resetGame();
+        lastResetTime = currentTime; // Update the last reset time
+      }
+
       if (settings.showGraphics) {
         if (leftEyebrowRaise > 0) {
           const leftEyeCenter = {
@@ -227,8 +236,8 @@ function initGUI() {
     .onChange(onSettingsChange);
   gui.add(settings, "mouthThresholdFloor", 0, 50, 1).onChange(onSettingsChange);
   gui.add(settings, "mouthThresholdCeil", 0, 50, 1).onChange(onSettingsChange);
-  gui.add(settings, "pitchFloor", 0, 1000).onChange(onSettingsChange); // Add pitchFloor to GUI
-  gui.add(settings, "pitchCeil", 0, 1000).onChange(onSettingsChange); // Add pitchCeil to GUI
+  gui.add(settings, "pitchFloor", 100, 1000).onChange(onSettingsChange); // Add pitchFloor to GUI
+  gui.add(settings, "pitchCeil", 100, 1000).onChange(onSettingsChange); // Add pitchCeil to GUI
   gui
     .add(settings, "model", ["tinyFaceDetector", "ssdMobilenetv1", "mtcnn"])
     .onChange(onSettingsChange);
@@ -237,6 +246,31 @@ function initGUI() {
 
   const customContainer = document.getElementById("gui-container");
   customContainer.appendChild(gui.domElement);
+
+  // Load and apply GUI visibility state
+  const guiState = localStorage.getItem("guiVisibilityState");
+  if (guiState === "hidden") {
+    gui.hide();
+  }
+
+  // Add button to toggle GUI visibility and save state
+  const toggleButton = document.createElement("button");
+  toggleButton.innerText = "Toggle GUI";
+  toggleButton.style.position = "absolute";
+  toggleButton.style.top = "10px";
+  toggleButton.style.right = "10px";
+  toggleButton.style.zIndex = "1000";
+  document.body.appendChild(toggleButton);
+
+  toggleButton.addEventListener("click", () => {
+    if (gui.domElement.style.display === "none") {
+      gui.show();
+      localStorage.setItem("guiVisibilityState", "visible");
+    } else {
+      gui.hide();
+      localStorage.setItem("guiVisibilityState", "hidden");
+    }
+  });
 }
 
 function onSettingsChange() {
@@ -269,12 +303,8 @@ function getMouthOpen() {
   return mouthOpen;
 }
 
-function getBrows() {
-  return leftEyebrowRaise;
-}
-
 function getPitchRange() {
   return { pitchFloor: settings.pitchFloor, pitchCeil: settings.pitchCeil };
 }
 
-export { init, getMouthOpen, getPitchRange, getBrows }; // Export the getter function
+export { init, getMouthOpen, getPitchRange }; // Export the getter function

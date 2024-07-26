@@ -1,6 +1,5 @@
-// flappyBird.js
-import { getMouthOpen, getBrows } from "./face.js";
-import { updatePitch, stopSound, initializeSound } from "./sound.js";
+import { getMouthOpen } from "./face.js";
+import { initializeSound, updatePitch, stopSound } from "./sound.js";
 
 const canvas = document.createElement("canvas");
 canvas.id = "gameCanvas"; // Set the ID for the canvas to apply CSS
@@ -21,7 +20,9 @@ let lift = -4;
 let velocity = 0;
 let score = 0;
 let pipeWidth = 100;
-let pipeSpeed = 2;
+let initPipeSpeed = 10;
+let pipeSpeed = initPipeSpeed;
+let pipeSpeedIncrement = 0.1; // Speed increment for each passed pipe
 let pipeSpacing = 700; // Increased space between consecutive pipes
 let gameRunning = true;
 
@@ -63,10 +64,11 @@ function resetGame() {
   targetBirdY = birdY;
   velocity = 0;
   score = 0;
+  pipeSpeed = initPipeSpeed; // Reset pipe speed
   pipes = [];
   spawnPipe();
   gameRunning = true;
-  initializeSound(); // Restart the sound when the game starts again
+  initializeSound(); // Restart the sound when the game starts again with a new random note
   draw();
 }
 
@@ -83,6 +85,7 @@ function draw() {
 
   // Draw pipes
   ctx.fillStyle = "#228B22";
+  let nextPipeGapY = 0; // Default value if no pipes are present
   for (let i = 0; i < pipes.length; i++) {
     let constant = pipes[i].y + gap; // Position of the lower pipe
     ctx.fillRect(pipes[i].x, 0, pipeWidth, pipes[i].y); // Upper pipe
@@ -92,6 +95,10 @@ function draw() {
       pipeWidth,
       canvas.height - constant - 40,
     ); // Lower pipe
+
+    if (i === 0) {
+      nextPipeGapY = pipes[i].y + gap / 2; // Y position of the center of the first pipe gap
+    }
 
     pipes[i].x -= pipeSpeed;
 
@@ -110,6 +117,7 @@ function draw() {
     if (pipes[i].x + pipeWidth < 0) {
       pipes.splice(i, 1);
       score++;
+      pipeSpeed += pipeSpeedIncrement; // Increase pipe speed with each passed pipe
     }
   }
 
@@ -128,14 +136,13 @@ function draw() {
 
   // Update bird's target position based on mouthOpen value from face.js
   targetBirdY = canvas.height - getMouthOpen() * canvas.height;
-  // targetBirdY = canvas.height - getBrows() * canvas.height;
 
   // Tween bird's position towards targetBirdY
   const tweenSpeed = 0.1; // Adjust tween speed as needed
   birdY += (targetBirdY - birdY) * tweenSpeed;
 
-  // Update pitch based on bird's position
-  updatePitch(birdY, canvas.height);
+  // Update pitch based on bird's position and the next pipe gap
+  updatePitch(birdY, canvas.height, nextPipeGapY);
 
   // Draw score
   ctx.fillStyle = "#000";
@@ -148,3 +155,5 @@ function draw() {
 export function startFlappyBird() {
   draw();
 }
+
+export { resetGame }; // Export the getter function
