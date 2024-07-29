@@ -31,17 +31,6 @@ let pipeSpeedIncrement = 0.1; // Speed increment for each passed pipe
 let pipeSpacing = 700; // Increased space between consecutive pipes
 let gameRunning = true;
 
-// On key down
-document.addEventListener("keydown", (e) => {
-  if (e.code === "Space") {
-    if (gameRunning) {
-      moveUp();
-    } else {
-      resetGame();
-    }
-  }
-});
-
 function moveUp() {
   velocity = lift;
 }
@@ -157,9 +146,19 @@ function draw() {
   ctx.font = "20px Arial";
   ctx.fillText("Score: " + score, 10, canvas.height - 20);
 
+  // // Check if the game should restart
+  // if (shouldRestartGame()) {
+  //   console.log("Restarting game due to eyebrow raise");
+  //   resetGame();
+  // }
+
   requestAnimationFrame(draw);
 }
 
 export function startFlappyBird() {
   draw();
+}
+
+export function isGameRunning() {
+  return gameRunning;
 }

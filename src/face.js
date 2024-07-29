@@ -1,22 +1,23 @@
 import * as faceapi from "face-api.js";
 import dat from "dat.gui";
-
-import { resetGame } from "./flappyBird.js";
+import { resetGame, isGameRunning } from "./flappyBird.js";
 
 const defaultSettings = {
-  inputSize: 160,
-  detectionInterval: 200,
+  inputSize: 256,
+  detectionInterval: 20,
   scoreThreshold: 0.5,
   eyebrowThresholdFloor: 10,
   eyebrowThresholdCeil: 30,
   mouthThresholdFloor: 10,
-  mouthThresholdCeil: 50,
-  pitchFloor: 200, // Minimum frequency in Hz
-  pitchCeil: 800, // Maximum frequency in Hz
+  mouthThresholdCeil: 39,
+  pitchFloor: 20,
+  pitchCeil: 400,
   model: "tinyFaceDetector",
-  showLandmarks: true,
+  showLandmarks: false,
   showGraphics: true,
 };
+
+const GUI_OPEN_KEY = "guiOpenState";
 
 function loadSettings() {
   const savedSettings = localStorage.getItem("faceDetectionSettings");
@@ -38,7 +39,7 @@ let previousDetection = null;
 let canvas;
 let ctx;
 let mouthOpen = 0; // Initialize mouthOpen value
-let leftEyebrowRaise = 0; // Initialize mouthOpen value
+let leftEyebrowRaise = 0; // Initialize leftEyebrowRaise value
 let lastResetTime = 0; // Track the last reset time
 
 async function setupWebcam() {
@@ -159,7 +160,11 @@ async function detectFaces(videoEl) {
       const rightEyebrowRaise = calculateEyebrowRaise(rightEyebrow, rightEye);
 
       const currentTime = Date.now();
-      if (leftEyebrowRaise > 0.7 && currentTime - lastResetTime > 3000) {
+      if (
+        !isGameRunning() &&
+        leftEyebrowRaise > 0.7 &&
+        currentTime - lastResetTime > 3000
+      ) {
         resetGame();
         lastResetTime = currentTime; // Update the last reset time
       }
@@ -236,40 +241,44 @@ function initGUI() {
     .onChange(onSettingsChange);
   gui.add(settings, "mouthThresholdFloor", 0, 50, 1).onChange(onSettingsChange);
   gui.add(settings, "mouthThresholdCeil", 0, 50, 1).onChange(onSettingsChange);
-  gui.add(settings, "pitchFloor", 0, 1000).onChange(onSettingsChange); // Add pitchFloor to GUI
-  gui.add(settings, "pitchCeil", 0, 1000).onChange(onSettingsChange); // Add pitchCeil to GUI
   gui
     .add(settings, "model", ["tinyFaceDetector", "ssdMobilenetv1", "mtcnn"])
     .onChange(onSettingsChange);
   gui.add(settings, "showLandmarks").onChange(onSettingsChange);
   gui.add(settings, "showGraphics").onChange(onSettingsChange);
+  gui.add(settings, "pitchFloor", 20, 2000, 1).onChange(onSettingsChange);
+  gui.add(settings, "pitchCeil", 20, 2000, 1).onChange(onSettingsChange);
 
   const customContainer = document.getElementById("gui-container");
   customContainer.appendChild(gui.domElement);
 
-  // Load and apply GUI visibility state
-  const guiState = localStorage.getItem("guiVisibilityState");
-  if (guiState === "hidden") {
-    gui.hide();
+  // Add logic to remember GUI open/closed state
+  const savedGUIOpenState = localStorage.getItem(GUI_OPEN_KEY);
+  if (savedGUIOpenState === "false") {
+    gui.closed = true; // Close the GUI
+  } else {
+    gui.closed = false; // Open the GUI
   }
 
-  // Add button to toggle GUI visibility and save state
-  const toggleButton = document.createElement("button");
-  toggleButton.innerText = "Toggle GUI";
-  toggleButton.style.position = "absolute";
-  toggleButton.style.top = "10px";
-  toggleButton.style.right = "10px";
-  toggleButton.style.zIndex = "1000";
-  document.body.appendChild(toggleButton);
+  window.serializeGUI = () => {
+    const serializedSettings = JSON.stringify(settings);
+    console.log("Serialized settings:", serializedSettings);
+  };
 
-  toggleButton.addEventListener("click", () => {
-    if (gui.domElement.style.display === "none") {
-      gui.show();
-      localStorage.setItem("guiVisibilityState", "visible");
-    } else {
-      gui.hide();
-      localStorage.setItem("guiVisibilityState", "hidden");
+  window.applySerializedGUI = (json) => {
+    const parsedSettings = JSON.parse(json);
+    for (const key in parsedSettings) {
+      if (key in settings) {
+        settings[key] = parsedSettings[key];
+      }
     }
+    saveSettings(settings);
+    onSettingsChange();
+  };
+
+  // Save the GUI open/closed state
+  gui.domElement.addEventListener("click", () => {
+    localStorage.setItem(GUI_OPEN_KEY, !gui.closed ? "true" : "false");
   });
 }
 
@@ -303,8 +312,15 @@ function getMouthOpen() {
   return mouthOpen;
 }
 
-function getPitchRange() {
-  return { pitchFloor: settings.pitchFloor, pitchCeil: settings.pitchCeil };
+function getBrows() {
+  return leftEyebrowRaise;
 }
 
-export { init, getMouthOpen, getPitchRange }; // Export the getter function
+function getPitchRange() {
+  return {
+    pitchFloor: settings.pitchFloor,
+    pitchCeil: settings.pitchCeil,
+  };
+}
+
+export { init, getMouthOpen, getBrows, getPitchRange }; // Export the getter functions
