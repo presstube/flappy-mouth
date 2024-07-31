@@ -1,19 +1,14 @@
 # Mouthy Bird
 
-![Mouthy Bird Gameplay](https://presstube.github.io/mouthy-bird/mouthy-bird-3.gif)
-
 [Play Mouthy Bird! (laptop/desktop only)](https://presstube.github.io/mouthy-bird/)
 
-**Mouthy Bird** is an interactive, face-controlled game where the player uses facial movements to control a bird's flight, avoiding obstacles and aiming for a high score. The game uses face detection technology to track facial expressions and map them to in-game actions.
+![Mouthy Bird Gameplay](https://presstube.github.io/mouthy-bird/mouthy-bird-4.gif)
 
-This game was coded with assistance from ChatGPT 4o. To learn more about how to use AI to write code visit my AI coding workshop project: [WORMHOLE](https://presstube.com/wormhole)
+**Mouthy Bird** is a game where the player opens and closes their mouth to control the altitude of their "bird" and make it through an ever faster approaching series of walls. Based on the classic game [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) by Dong Nguyen.
 
-## Features
+The game provides audio tones in each ear to assist with navigation. The left ear tone corresponds to the height of the bird while the right ear tone corresponds to the height of the next hole the bird needs to fly through. This allows players to play with their eyes closed just by matching the two tones.
 
-- **Face-Controlled Flight**: Control the bird's movement by opening and closing your mouth, which adjusts the bird's altitude. An eyebrow shrug can restart the game.
-- **Dynamic Obstacles**: Navigate through pipes that continuously spawn, increasing in difficulty by speeding up as you progress.
-- **Visual and Audio Feedback**: The game provides real-time visual feedback and sound effects, including unique tones in each ear to assist with navigation.
-- **Audio Navigation**: The right ear tone corresponds to the height of the hole, while the left ear tone corresponds to the height of the bird. This allows for an immersive experience where players can potentially play with their eyes closed.
+Mouth Bird was coded with the assistance of ChatGPT 4o. To learn more about how to use AI to write code visit: [WORMHOLE](https://presstube.com/wormhole)
 
 ## How It Works
 
@@ -43,13 +38,11 @@ To run the game locally, follow these steps:
    npm run dev
    ```
 
-4. **Open your browser** and navigate to the local server address provided, typically `http://localhost:3000`.
-
 ## Controls
 
-- **Mouth**: Open and close your mouth to control the height of the "bird".
+- **Mouth**: Open and close your mouth to control the height of the bird.
+- **Eyebrow Shrug**: Restart the game once you're dead.
 - **C Key**: Toggle the dat.GUI panel for adjusting game settings.
-- **Eyebrow Shrug**: Restart the game.
 
 ## Customization
 
@@ -66,14 +59,6 @@ To customize settings, press the 'C' key to toggle the settings panel.
 ### Face-API Model
 
 The game uses a pre-trained model for face detection, located in the `public/models` directory. You can replace these models with custom models if needed.
-
-## Contributing
-
-Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ## Acknowledgments
 
