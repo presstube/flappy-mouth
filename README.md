@@ -1,10 +1,12 @@
 # Mouthy Bird
 
+![Mouthy Bird Gameplay](https://presstube.github.io/mouthy-bird/mouthy-bird.gif)
+
 [Play Mouthy Bird NOW! (laptop/desktop only)](https://presstube.github.io/mouthy-bird/)
 
 **Mouthy Bird** is an interactive, face-controlled game where the player uses facial movements to control a bird's flight, avoiding obstacles and aiming for a high score. The game uses face detection technology to track facial expressions and map them to in-game actions.
 
-This game was coded with assistance from ChatGPT 4o. To learn more about effectively using AI to code visit my code workshop project: [WORMHOLE](https://presstube.com/wormhole)
+This game was coded with assistance from ChatGPT 4o. To learn more about how to use AI to write code visit my AI coding workshop project: [WORMHOLE](https://presstube.com/wormhole)
 
 ## Features
 
@@ -45,7 +47,7 @@ To run the game locally, follow these steps:
 
 ## Controls
 
-- **Mouth**: Open and close your mouth to control the height of the "bird"
+- **Mouth**: Open and close your mouth to control the height of the "bird".
 - **C Key**: Toggle the dat.GUI panel for adjusting game settings.
 - **Eyebrow Shrug**: Restart the game.
 
