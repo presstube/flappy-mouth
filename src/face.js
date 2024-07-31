@@ -1,6 +1,6 @@
 import * as faceapi from "face-api.js";
 import dat from "dat.gui";
-import { resetGame, isGameRunning } from "./flappyBird.js";
+import { resetGame, isGameRunning } from "./mouthyBird.js";
 
 const defaultSettings = {
   inputSize: 256,
@@ -41,6 +41,8 @@ let ctx;
 let mouthOpen = 0; // Initialize mouthOpen value
 let leftEyebrowRaise = 0; // Initialize leftEyebrowRaise value
 let lastResetTime = 0; // Track the last reset time
+let gui; // Reference to dat.GUI instance
+let guiContainer; // Container for dat.GUI
 
 async function setupWebcam() {
   const video = document.createElement("video");
@@ -229,7 +231,7 @@ async function onPlay(videoEl) {
 }
 
 function initGUI() {
-  const gui = new dat.GUI({ autoPlace: false });
+  gui = new dat.GUI({ autoPlace: false });
   gui.add(settings, "inputSize", 128, 320, 32).onChange(onSettingsChange);
   gui.add(settings, "detectionInterval", 1, 500, 20).onChange(onSettingsChange);
   gui.add(settings, "scoreThreshold", 0.1, 0.9, 0.1).onChange(onSettingsChange);
@@ -249,15 +251,16 @@ function initGUI() {
   gui.add(settings, "pitchFloor", 20, 2000, 1).onChange(onSettingsChange);
   gui.add(settings, "pitchCeil", 20, 2000, 1).onChange(onSettingsChange);
 
-  const customContainer = document.getElementById("gui-container");
-  customContainer.appendChild(gui.domElement);
+  guiContainer = document.getElementById("gui-container");
+  guiContainer.appendChild(gui.domElement);
+  guiContainer.style.display = "none"; // Hide the GUI by default
 
   // Add logic to remember GUI open/closed state
   const savedGUIOpenState = localStorage.getItem(GUI_OPEN_KEY);
   if (savedGUIOpenState === "false") {
-    gui.closed = true; // Close the GUI
+    guiContainer.style.display = "none"; // Keep GUI hidden
   } else {
-    gui.closed = false; // Open the GUI
+    guiContainer.style.display = "block"; // Show GUI
   }
 
   window.serializeGUI = () => {
@@ -276,9 +279,13 @@ function initGUI() {
     onSettingsChange();
   };
 
-  // Save the GUI open/closed state
-  gui.domElement.addEventListener("click", () => {
-    localStorage.setItem(GUI_OPEN_KEY, !gui.closed ? "true" : "false");
+  // Event listener for the 'c' key to toggle GUI visibility
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "c") {
+      const isHidden = guiContainer.style.display === "none";
+      guiContainer.style.display = isHidden ? "block" : "none";
+      localStorage.setItem(GUI_OPEN_KEY, isHidden ? "true" : "false");
+    }
   });
 }
 
