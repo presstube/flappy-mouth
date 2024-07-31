@@ -1,6 +1,6 @@
 # Mouthy Bird
 
-![Mouthy Bird Gameplay](https://presstube.github.io/mouthy-bird/mouthy-bird-2.gif)
+![Mouthy Bird Gameplay](https://presstube.com/mouthy-bird/mouthy-bird-2.gif)
 
 [Play Mouthy Bird! (laptop/desktop only)](https://presstube.github.io/mouthy-bird/)
 
