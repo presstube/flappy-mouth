@@ -2,8 +2,6 @@
 
 ![Mouthy Bird Gameplay](https://presstube.github.io/mouthy-bird/mouthy-bird.gif)
 
-https://presstube.github.io/mouthy-bird/mouthy-bird.gif
-
 <img src="https://presstube.github.io/mouthy-bird/mouthy-bird.gif?raw=true" width="200px">
 
 [Play Mouthy Bird NOW! (laptop/desktop only)](https://presstube.github.io/mouthy-bird/)
