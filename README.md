@@ -2,7 +2,7 @@
 
 [Play Mouthy Bird! (laptop/desktop only)](https://presstube.github.io/mouthy-bird/)
 
-![Mouthy Bird Gameplay](https://presstube.github.io/mouthy-bird/mouthy-bird-4.gif)
+![Mouthy Bird Gameplay](https://presstube.github.io/mouthy-bird/mouthy-bird-5.gif)
 
 **Mouthy Bird** is a game where the player opens and closes their mouth to control the altitude of their "bird" and make it through an ever faster approaching series of walls. Based on the classic game [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) by Dong Nguyen.
 

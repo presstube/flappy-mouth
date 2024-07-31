@@ -133,6 +133,21 @@ function draw() {
       console.log("COLLIDE");
       stopSound(); // Stop sound on game over
       playGameOverMelody(); // Play the game over melody
+      // Display game over message and score
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "72px Kriller4";
+      ctx.textAlign = "center";
+      ctx.fillText(
+        "Score: " + score,
+        canvas.width / (2 * dpr),
+        canvas.height / (2 * dpr) - 50,
+      );
+      ctx.font = "20px Kriller4";
+      ctx.fillText(
+        "(shrug brows to play again)",
+        canvas.width / (2 * dpr),
+        canvas.height / (2 * dpr) + 10,
+      );
       return;
     }
 
@@ -170,9 +185,9 @@ function draw() {
 
   // Draw score with custom font at top right
   ctx.fillStyle = "#fff";
-  ctx.font = "20px Kriller4";
+  ctx.font = "42px Kriller4";
   ctx.textAlign = "right";
-  ctx.fillText("Score: " + score, canvas.width / dpr - 10, 20);
+  ctx.fillText("Score: " + score, canvas.width / dpr - 10, 50);
 
   requestAnimationFrame(draw);
 }
