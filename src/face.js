@@ -18,6 +18,8 @@ const defaultSettings = {
 };
 
 const GUI_OPEN_KEY = "guiOpenState";
+let gui; // Declare GUI object
+let guiVisible = false; // Track GUI visibility
 
 function loadSettings() {
   const savedSettings = localStorage.getItem("faceDetectionSettings");
@@ -41,8 +43,6 @@ let ctx;
 let mouthOpen = 0; // Initialize mouthOpen value
 let leftEyebrowRaise = 0; // Initialize leftEyebrowRaise value
 let lastResetTime = 0; // Track the last reset time
-let gui; // Reference to dat.GUI instance
-let guiContainer; // Container for dat.GUI
 
 async function setupWebcam() {
   const video = document.createElement("video");
@@ -251,40 +251,34 @@ function initGUI() {
   gui.add(settings, "pitchFloor", 20, 2000, 1).onChange(onSettingsChange);
   gui.add(settings, "pitchCeil", 20, 2000, 1).onChange(onSettingsChange);
 
-  guiContainer = document.getElementById("gui-container");
-  guiContainer.appendChild(gui.domElement);
-  guiContainer.style.display = "none"; // Hide the GUI by default
+  const customContainer = document.getElementById("gui-container");
+  customContainer.appendChild(gui.domElement);
 
-  // Add logic to remember GUI open/closed state
+  // Load the saved GUI open/closed state
   const savedGUIOpenState = localStorage.getItem(GUI_OPEN_KEY);
-  if (savedGUIOpenState === "false") {
-    guiContainer.style.display = "none"; // Keep GUI hidden
+  if (savedGUIOpenState === "false" || savedGUIOpenState === null) {
+    gui.hide(); // Hide the GUI
+    guiVisible = false;
   } else {
-    guiContainer.style.display = "block"; // Show GUI
+    gui.show(); // Show the GUI
+    guiVisible = true;
   }
 
-  window.serializeGUI = () => {
-    const serializedSettings = JSON.stringify(settings);
-    console.log("Serialized settings:", serializedSettings);
-  };
+  // Save the GUI open/closed state when toggled
+  gui.domElement.addEventListener("click", () => {
+    localStorage.setItem(GUI_OPEN_KEY, !gui.closed ? "true" : "false");
+  });
 
-  window.applySerializedGUI = (json) => {
-    const parsedSettings = JSON.parse(json);
-    for (const key in parsedSettings) {
-      if (key in settings) {
-        settings[key] = parsedSettings[key];
+  // Add keyboard listener to toggle GUI visibility with 'C' key
+  window.addEventListener("keydown", (e) => {
+    if (e.key.toLowerCase() === "c") {
+      guiVisible = !guiVisible;
+      if (guiVisible) {
+        gui.show();
+      } else {
+        gui.hide();
       }
-    }
-    saveSettings(settings);
-    onSettingsChange();
-  };
-
-  // Event listener for the 'c' key to toggle GUI visibility
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "c") {
-      const isHidden = guiContainer.style.display === "none";
-      guiContainer.style.display = isHidden ? "block" : "none";
-      localStorage.setItem(GUI_OPEN_KEY, isHidden ? "true" : "false");
+      localStorage.setItem(GUI_OPEN_KEY, guiVisible ? "true" : "false");
     }
   });
 }
@@ -330,4 +324,4 @@ function getPitchRange() {
   };
 }
 
-export { init, getMouthOpen, getBrows, getPitchRange }; // Export the getter functions
+export { init, getMouthOpen, getBrows, getPitchRange };

@@ -6,9 +6,9 @@
 
 **Mouthy Bird** is a game where the player opens and closes their mouth to control the altitude of their "bird" and make it through an ever faster approaching series of walls. Based on the classic game [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) by Dong Nguyen.
 
-The game provides audio tones in each ear to assist with navigation. The left ear tone corresponds to the height of the bird while the right ear tone corresponds to the height of the next hole the bird needs to fly through. This allows players to play with their eyes closed just by matching the two tones.
+The game provides audio tones in each ear for maximum synaesthetic navigation. The left ear tone corresponds to the height of the bird while the right ear tone corresponds to the height of the next hole. This allows players to play with their eyes closed by matching the two tones.
 
-Mouth Bird was coded with the assistance of ChatGPT 4o. To learn more about how to use AI to write code visit: [WORMHOLE](https://presstube.com/wormhole)
+Mouthy Bird was coded in under a day with the assistance of ChatGPT 4o. To learn more about how to use AI to write code visit: [WORMHOLE](https://presstube.com/wormhole)
 
 ## How It Works
 
