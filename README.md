@@ -2,6 +2,10 @@
 
 ![Mouthy Bird Gameplay](https://presstube.github.io/mouthy-bird/mouthy-bird.gif)
 
+https://presstube.github.io/mouthy-bird/mouthy-bird.gif
+
+<img src="https://presstube.github.io/mouthy-bird/mouthy-bird.gif?raw=true">
+
 [Play Mouthy Bird NOW! (laptop/desktop only)](https://presstube.github.io/mouthy-bird/)
 
 **Mouthy Bird** is an interactive, face-controlled game where the player uses facial movements to control a bird's flight, avoiding obstacles and aiming for a high score. The game uses face detection technology to track facial expressions and map them to in-game actions.
